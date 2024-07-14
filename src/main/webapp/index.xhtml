@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Item List</title>
+	<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 20px;
+}
+
+h1 {
+	text-align: center;
+}
+
+.item-list-container {
+	width: 80%;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+.button-container {
+  text-align: center;
+}
+</style>
+</h:head>
+<h:body>
+	<h:form>
+		<p:commandButton value="Add " action="addProduct"
+			style="margin-bottom: 10px;" />
+	</h:form>
+	<h:form>
+		<h1>Items</h1>
+		<p:messages id="messages" showDetail="true" closable="true"
+			autoUpdate="true">
+		</p:messages>
+		<div class="item-list-container">
+			<div class="item-list">
+				<h:form>
+					<p:dataTable value="#{itemBean.items}" var="item"
+						style="width:100%">
+						<p:column headerText="name">
+							<h:outputText value="#{item.name}" />
+						</p:column>
+						<p:column headerText="quantity">
+							<h:outputText value="#{item.quantity}" />
+						</p:column>
+						<p:column headerText="date">
+							<h:outputText value="#{item.date}" />
+						</p:column>
+						<p:column>
+						<div class="button-container">
+							<p:commandButton value="Xóa"
+								actionListener="#{itemBean.deleteI(item)}" autoUpdate="true" action ="del"  />
+					    </div>
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</div>
+		</div>
+	</h:form>
+</h:body>
+</html>
