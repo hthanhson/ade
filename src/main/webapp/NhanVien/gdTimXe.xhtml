@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <style>
+
+        .input-text, .textarea, .output-text {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+
+        .textarea {
+            height: 100px;
+        }
+
+        .output-text {
+            font-size: 16px;
+            color: #333;
+            padding: 5px;
+            margin-top: 10px;
+        }
+        .label-column {
+            font-weight: bold;
+            text-align: right;
+            padding-right: 10px;
+            width: 30%;
+        }
+        .value-column {
+            text-align: left;
+            padding-left: 10px;
+            width: 70%;
+        }
+
+        .custom-dataTable {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .custom-column {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .custom-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .custom-tab {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .custom-commandLink {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .custom-commandLink:hover {
+            text-decoration: underline;
+        }
+
+        .custom-dialog {
+            width: 75%;
+            height: 60%;
+            min-width: 300px;
+            min-height: 300px;
+        }
+
+        .custom-panelGrid {
+            width: 100%;
+            margin: 20px 0;
+        }
+
+    </style>
+</h:head>
+<h:body>
+    <h:form>
+        <p:dialog header="Thông báo" widgetVar="dialog2" modal="true" value="#{pTTDAO.message}">
+            <h:outputText value="#{pTTDAO.message}" />
+        </p:dialog>
+        <p:row>
+            <p:inputText value="#{pTTDAO.ttThue}"/>
+        </p:row>
+        <p:row>
+            <p:commandButton action="#{pTTDAO.searchYCThue()}" update="table" ajax="false" styleClass="custom-button" value="Tìm kiếm"/>
+        </p:row>
+
+        <p:dataTable id="table" value="#{pTTDAO.donycthue}" var="data" styleClass="custom-dataTable">
+            <p:column headerText="Mã" styleClass="custom-column">
+                <h:outputText value="#{data.id}"/>
+            </p:column>
+            <p:column headerText="Tên người thuê" styleClass="custom-column">
+                <h:outputText value="#{data.userId}"/>
+            </p:column>
+            <p:column headerText="Trạng thái" styleClass="custom-column">
+                <h:outputText value="#{data.TT}"/>
+            </p:column>
+            <p:column headerText="Xem chi tiết" styleClass="custom-column">
+                <h:commandLink value="Tạo phiếu" action="#{pTTDAO.searchXe(data.tblXeDcChonId)}" update="dialog" styleClass="custom-commandLink"/>
+            </p:column>
+        </p:dataTable>
+
+        <p:dialog widgetVar="dialog" styleClass="custom-dialog" header="Tạo phiếu thanh toán">
+            <p:tab >
+                <p:panelGrid columns="2" layout="grid" styleClass="custom-panelGrid">
+                    <h:outputText value="Người thuê" styleClass="label-column"/>
+                    <h:outputText value="#{pTTDAO.xeChon.userId}" styleClass="value-column"/>
+                    <h:outputText value="Thời gian bắt đầu thuê" styleClass="label-column"/>
+                    <h:outputText value="#{pTTDAO.xeChon.timeStart}" styleClass="value-column"/>
+                    <h:outputText value="Thời gian hết hạn" styleClass="label-column"/>
+                    <h:outputText value="#{pTTDAO.xeChon.timeEnd}" styleClass="value-column"/>
+                </p:panelGrid>
+            </p:tab>
+
+            <p:tab title="Danh sách xe thuê">
+                <p:dataTable id="tabledata" value="#{pTTDAO.xeAndXeChon}" var="dataa" styleClass="custom-dataTable">
+                    <p:column headerText="Danh sách xe thuê" styleClass="custom-column">
+                        <p:dataTable value="#{dataa.value}" var="v">
+                            <p:column headerText="Tên xe" styleClass="custom-column">
+                                <p:outputLabel value="#{v.name}"/>
+                            </p:column>
+                            <p:column headerText="Biển số" styleClass="custom-column">
+                                <p:outputLabel value="#{v.bienSo}"/>
+                            </p:column>
+                            <p:column headerText="Giá thuê" styleClass="custom-column">
+                                <p:outputLabel value="#{v.giaThue}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+
+            <p:tab>
+                <p:panelGrid >
+                    <h:outputText value="Tình trạng xe sau trả" class="label-column"/>
+                    <p:inputTextarea value="#{pTTDAO.note}" class="textarea"/>
+                </p:panelGrid>
+                <p:panelGrid styleClass="custom-panelGrid">
+                            <h:outputText value="Tổng chi phí cho thời gian thuê" styleClass="label-column"/>
+                            <h:outputText value="#{pTTDAO.num}" class="output-text"/>
+                </p:panelGrid>
+                <p:panelGrid styleClass="custom-panelGrid">
+                            <h:outputText value="Tiền bồi thường(nếu có)" styleClass="label-column"/>
+                            <p:inputText value="#{pTTDAO.phat}"/>
+                </p:panelGrid>
+
+            </p:tab>
+            <p:commandButton actionListener="#{pTTDAO.savePTT()}" value="Lưu" ajax="false"/>
+        </p:dialog>
+    </h:form>
+</h:body>
+</html>

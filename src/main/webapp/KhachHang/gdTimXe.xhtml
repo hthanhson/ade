@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <style>
+        .ui-tabs .ui-tabs-nav {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ui-tabs .ui-tabs-nav li {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .ui-tabs .ui-tabs-nav li a {
+            display: block;
+            padding: 10px;
+        }
+
+        .ui-tabs .ui-tabs-panel {
+            padding: 20px;
+        }
+
+        .ui-commandbutton.ui-button {
+            float: right;
+            margin-top: 10px;
+        }
+    </style>
+</h:head>
+<h:body>
+    <h:form>
+        <p:tab>
+            <p:row>
+            <p:inputText title="Tìm kiếm" value="#{XeDAO.search}"/>
+            </p:row>
+            <p:row>
+            <p:selectOneMenu value="#{XeDAO.filter}">
+                <f:selectItem itemLabel="chọn" itemValue=""/>
+                <f:selectItems value ="#{XeDAO.listFilter}" var="x" itemValue="#{x.toString()}" >
+                </f:selectItems>
+            </p:selectOneMenu>
+            </p:row>
+            <p:row>
+                <p:column >
+                    <p:outputLabel value="Ngày bắt đầu" />
+                </p:column>
+            <p:calendar pattern="yyyy-MM-dd" value="#{XeDAO.thueXe.timeStart}">
+            </p:calendar>
+            </p:row>
+            <p:row>
+                <p:column >
+                    <p:outputLabel value="Ngày kết thúc" />
+                </p:column>
+                <p:calendar pattern="yyyy-MM-dd" value="#{XeDAO.thueXe.timeEnd}">
+                </p:calendar>
+            </p:row>
+            <p:commandButton actionListener="#{XeDAO.searchXe()}" value="Tìm kiếm" update="table" ajax="false"/>
+        </p:tab>
+        <p:tab>
+        <p:dataTable id="table" value="#{XeDAO.dsXe}" var="data">
+            <p:column headerText="Tên">
+                <h:outputText value="#{data.name}" />
+            </p:column>
+            <p:column headerText="Biển số">
+                <h:outputText value="#{data.bienSo}" />
+            </p:column>
+            <p:column headerText="Giá thuê">
+                <h:outputText value="#{data.giaThue}" />
+            </p:column>
+            <p:column headerText="Trạng thái">
+                <h:selectOneMenu value="#{XeDcDAO.acid[data.id]}">
+                    <f:selectItem itemLabel="Thuê" itemValue="0">
+                    </f:selectItem>
+                    <f:selectItem itemLabel="Hủy thuê" itemValue="1">
+                    </f:selectItem>
+                </h:selectOneMenu>
+            </p:column>
+        </p:dataTable>
+      </p:tab>
+        <p:tab>
+            <p:commandButton value="Đặt thuê" actionListener="#{XeDcDAO.getInfXe()}"/>
+        </p:tab>
+    </h:form>
+</h:body>
+</html>

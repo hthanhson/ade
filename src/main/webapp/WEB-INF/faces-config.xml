@@ -4,22 +4,6 @@
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
               http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
               version="2.2">
-    <navigation-rule>
-        <from-view-id>/login.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>return</from-outcome>
-            <to-view-id>/index.xhtml</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>ĐN</from-outcome>
-            <to-view-id>/login.xhtml</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
 
     <component>
      <component-type>org.primefaces.component.inputtext</component-type>

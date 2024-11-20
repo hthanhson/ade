@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h\:form {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .block {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .ui-inputText {
+            width: 100%;
+            max-width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            transition: border 0.3s ease;
+        }
+
+        .ui-inputText:hover {
+            border-color: #007bff;
+        }
+
+        .ui-inputText:focus {
+            border-color: #007bff;
+            background-color: #ffffff;
+        }
+
+    </style>
+</h:head>
+<h:body>
+    <h:form>
+        <p:messages id="messages" showDetail="true" closable="true"  value="#{TkKHangDAO.message}">
+            <p:autoUpdate />
+        </p:messages>
+        <div class="field">
+            <p:outputLabel for="username" styleClass="block">Username</p:outputLabel>
+            <p:inputText id="username" styleClass="ui-inputText" value ="#{TkKHangDAO.khachHang.thanhVien.username}"/>
+        </div>
+        <div class="field">
+            <p:outputLabel for="password" styleClass="block">Password</p:outputLabel>
+            <p:inputText id="password" styleClass="ui-inputText" value ="#{TkKHangDAO.khachHang.thanhVien.password}"/>
+        </div>
+        <div>
+            <p:commandButton value="Đăng nhập" actionListener="#{TkKHangDAO.kiemTraTT()}" update="messages"/>
+        </div>
+    </h:form>
+</h:body>
+</html>

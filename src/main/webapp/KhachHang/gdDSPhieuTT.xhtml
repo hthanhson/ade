@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h\:form {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .input-text, .textarea, .output-text {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+
+        .textarea {
+            height: 100px;
+        }
+
+        .output-text {
+            font-size: 16px;
+            color: #333;
+            padding: 5px;
+            margin-top: 10px;
+        }
+        .label-column {
+            font-weight: bold;
+            text-align: right;
+            padding-right: 10px;
+            width: 30%;
+        }
+        .value-column {
+            text-align: left;
+            padding-left: 10px;
+            width: 70%;
+        }
+
+        .custom-dataTable {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .custom-column {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .custom-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .custom-tab {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .custom-commandLink {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .custom-commandLink:hover {
+            text-decoration: underline;
+        }
+
+        .custom-dialog {
+            width: 75%;
+            height: 60%;
+            min-width: 300px;
+            min-height: 300px;
+        }
+
+        .custom-panelGrid {
+            width: 100%;
+            margin: 20px 0;
+        }
+
+    </style>
+</h:head>
+<h:body>
+    <h:form>
+        <p:dialog header="Thông báo" widgetVar="dialog2" modal="true" value="#{pTTDAO.message}">
+            <h:outputText value="#{pTTDAO.message}" />
+        </p:dialog>
+        <p:dataTable id="table" value="#{pTTDAO.pthanhtoan}" var="data">
+            <p:column headerText="mã phiếu" >
+                <p:outputLabel value="#{data.id}"/>
+            </p:column>
+            <p:column headerText="Trạng thái" >
+                <p:outputLabel value="#{data.TT}"/>
+            </p:column>
+            <p:column headerText="Xem chi tiết" >
+                <h:commandLink action="#{pTTDAO.getChiTietpTT(data.id)}">
+                    click để thanh toán
+                </h:commandLink>
+            </p:column>
+        </p:dataTable>
+        <p:dialog widgetVar="dialog" styleClass="custom-dialog" header="Phiếu thanh toán" modal="true">
+            <p:tab >
+                <p:panelGrid columns="2" layout="grid" styleClass="custom-panelGrid">
+                    <h:outputText value="Người thuê" styleClass="label-column"/>
+                    <h:outputText value="#{pTTDAO.xeChon.userId}" styleClass="value-column"/>
+                    <h:outputText value="Thời gian bắt đầu thuê" styleClass="label-column"/>
+                    <h:outputText value="#{pTTDAO.xeChon.timeStart}" styleClass="value-column"/>
+                    <h:outputText value="Thời gian hết hạn" styleClass="label-column"/>
+                    <h:outputText value="#{pTTDAO.xeChon.timeEnd}" styleClass="value-column"/>
+                </p:panelGrid>
+            </p:tab>
+
+            <p:tab title="Danh sách xe thuê">
+                <p:dataTable id="tabledata" value="#{pTTDAO.xeAndXeChon}" var="dataa" styleClass="custom-dataTable">
+                    <p:column headerText="Danh sách xe thuê" styleClass="custom-column">
+                        <p:dataTable value="#{dataa.value}" var="v">
+                            <p:column headerText="Tên xe" styleClass="custom-column">
+                                <p:outputLabel value="#{v.name}"/>
+                            </p:column>
+                            <p:column headerText="Biển số" styleClass="custom-column">
+                                <p:outputLabel value="#{v.bienSo}"/>
+                            </p:column>
+                            <p:column headerText="Giá thuê" styleClass="custom-column">
+                                <p:outputLabel value="#{v.giaThue}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+
+            <p:tab>
+                <p:panelGrid styleClass="custom-panelGrid">
+                    <h:outputText value="Tình trạng xe sau trả: " class="label-column"/>
+                    <h:outputText value="#{pTTDAO.pttd.note}" />
+                </p:panelGrid>
+                <p:panelGrid styleClass="custom-panelGrid">
+                    <h:outputText value="Tổng chi phí cho thời gian thuê" styleClass="label-column"/>
+                    <h:outputText value="#{pTTDAO.pttd.fee}" class="output-text"/>
+                </p:panelGrid>
+                <p:panelGrid styleClass="custom-panelGrid">
+                    <h:outputText value="Tiền bồi thường(nếu có)" styleClass="label-column"/>
+                    <h:outputText value="#{pTTDAO.pttd.phat}"/>
+                </p:panelGrid>
+                <p:panelGrid styleClass="custom-panelGrid">
+                    <h:outputText value="Trạng thái thanh toán" styleClass="label-column"/>
+                    <h:outputText value="#{pTTDAO.pttd.TT}"/>
+                </p:panelGrid>
+            </p:tab>
+            <p:commandButton actionListener="#{pTTDAO.valdiPTT(pTTDAO.pttd.id)}" value="Xác nhận" ajax="false" update="table"/>
+        </p:dialog>
+    </h:form>
+</h:body>
+</html>
